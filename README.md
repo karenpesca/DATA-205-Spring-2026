@@ -1,164 +1,173 @@
-This is my capstone project for data 205.
-# Broadband Availability & Infrastructure Analysis  
-## Odessa / Midland & Wichita Falls, Texas
-
-
+# Broadband Provider Coverage Comparison  
+## FCC vs FiberLocator Data – Texas Case Study (Odessa & Wichita Falls)
 
 ## Project Overview
 
-This project analyzes broadband availability using the FCC Broadband Data Collection (BDC) dataset and compares it with physical network infrastructure from the FiberLocator API.
+This project analyzes broadband provider coverage using FCC Broadband Data Collection (BDC) datasets and compares it with infrastructure data from the FiberLocator API.
 
-The objective is to understand how broadband service availability relates to underlying fiber infrastructure in selected Texas markets, with a focus on business-relevant connectivity.
+The goal is to identify differences, overlaps, and gaps between **reported broadband availability (FCC)** and **actual network infrastructure (FiberLocator)** in selected Texas cities.
 
+## Research Goal
 
+The primary objective is to compare broadband provider coverage across datasets to understand:
 
-## Objectives
+- Provider presence by location
+- Differences between reported service and physical infrastructure
+- Geographic patterns of broadband availability
 
-- Identify dominant broadband providers in each study area
-- Analyze distribution of broadband technologies (fiber vs cable)
-- Evaluate provider density across geographic areas
-- Compare FCC-reported availability with FiberLocator infrastructure
-- Focus specifically on business and mixed-use service locations
+## Research Questions
 
-
+1. Which broadband carriers are available in each city based on FCC data?
+2. Which broadband carriers are available based on FiberLocator data?
+3. How do FCC and FiberLocator provider lists compare?
+4. Are there providers present in FCC but missing in FiberLocator?
+5. Are there providers present in FiberLocator but not in FCC?
+6. How many providers are available per geographic area (H3 hexagon)?
+7. Are there areas where FCC shows coverage but FiberLocator does not?
+8. Are there areas where FiberLocator shows infrastructure but FCC does not?
 
 ## Study Areas
 
-Due to the absence of city-level identifiers in the FCC dataset, counties were used as proxies:
+Since the FCC dataset does not include city names, counties were used as geographic proxies:
 
 - **Ector County (48135)** → Odessa  
-- **Midland County (48329)** → Odessa metropolitan area  
+- **Midland County (48329)** → Odessa metro area  
 - **Wichita County (48485)** → Wichita Falls  
 
-Filtering was performed using the first five digits of the `block_geoid` field.
-
+Filtering was performed using the first five digits of the `block_geoid`.
 
 ## Data Sources
 
-### FCC Broadband Data Collection (BDC)
-- 2 Data Sets: Cable and fiber premises tecnohlogy.
+### FCC Broadband Data Collection (BDC) from Texas.
+- Fiber-to-the-premises dataset  
+- Cable dataset  
 
-These datasets provide location-level broadband availability, including:
-- Provider (brand_name)
-- Technology
-- Business vs residential classification
-- H3 spatial identifiers
+Variables used include:
+- `brand_name` (provider)
+- `technology`
+- `business_residential_code`
+- `block_geoid`
+- `h3_res8_id`
 
+### FiberLocator Data
+Accessed via API and/or GeoJSON:
+- Metro fiber networks  
+- Long-haul routes  
+- Connected buildings  
 
-### FiberLocator API
-Used to enrich the analysis with infrastructure data:
-- Metro fiber networks
-- Long-haul fiber routes
-- Connected commercial buildings
-
-This allows comparison between **reported service availability** and **actual network infrastructure**.
-
+Used to represent physical infrastructure.
 
 ## Methodology
 
 ### 1. Data Ingestion
-- Loaded FCC fiber premises and cable datasets from Google Drive
-- Combined the 2 datasets into a unified dataset by for analysis
-
-
+- Loaded FCC fiber and cable datasets from Google Drive
+- Combined datasets using concatenation for unified analysis
 
 ### 2. Data Cleaning & Preparation
-- Filtered records using county FIPS codes via `block_geoid`
+-  Used string conversion on `block_geoid` during filtering to extract the first five digits (county FIPS codes)
+- Extracted county FIPS from `block_geoid`
+- Filtered dataset to selected counties
 - Removed residential-only records (`R`)
-- Retained:
+- Focused on:
   - Business (`B`)
   - Business/Residential (`X`)
-- Standardized categorical fields for clarity
 
 
-### 3. Provider Analysis
-- Calculated provider frequency using `brand_name`
-- Identified top providers by number of serviceable locations
-- Visualized results using bar charts
+### 3. Exploratory Data Analysis (EDA)
+- Counted providers using `brand_name`
+- Analyzed distribution of technologies
+- Evaluated business vs residential composition
+- Generated summary tables and visualizations
 
 
 ### 4. Spatial Aggregation (H3)
 
-To enable geographic analysis:
-- Data was grouped by H3 hexagon (`h3_res8_id`)
-- Aggregated attributes per hexagon:
-  - Total locations
-  - Unique providers
-  - Technologies present
-  - Business categories
+Data was grouped by `h3_res8_id` to create spatial summaries:
 
-This converts row-level data into spatial summaries.
+- Number of locations
+- Unique providers (`unique_brands`)
+- Provider count (`unique_brands_count`)
+- Technologies present
 
+---
 
 ### 5. Geometry Creation
-
 - Converted H3 indices into polygon geometries
-- Built a GeoDataFrame using Shapely and GeoPandas
-- Exported to GeoJSON for mapping
+- Built GeoDataFrames using GeoPandas and Shapely
+- Exported GeoJSON for mapping
 
+---
 
-### 6. Mapping & Visualization
+### 6. Visualization
 
 Maps were created using Folium:
 
 #### FCC Maps
-- Display broadband availability by H3 hexagon
-- Visualize provider density and geographic distribution
+- Show provider density and availability using H3 hexagons
 
 #### FiberLocator Maps
-- Overlay:
+- Overlay infrastructure:
   - Metro networks
   - Long-haul routes
   - Connected buildings
 
+---
 
+### 7. Comparison Analysis
 
-### 7. Comparative Analysis
+FCC and FiberLocator data were compared to identify:
 
-The project compares:
+- Overlapping providers
+- Missing providers in each dataset
+- Spatial mismatches between availability and infrastructure
 
-| FCC Data | FiberLocator API |
+---
 
-- Service availability | Physical infrastructure 
-- Provider presence | Network footprint 
-- Location-level coverage | Network topology 
+## 🔍 Key Observations
 
+- Broadband availability varies significantly across hexagons
+- Provider presence is concentrated in specific geographic clusters
+- Some areas show infrastructure presence but limited FCC-reported providers
+- Differences exist between reported coverage and physical network assets
 
-## Key Insights
+---
 
-- Provider presence is concentrated in specific hexagonal clusters
-- Some areas show strong infrastructure but fewer reported providers
-- Business-focused connectivity differs from general residential availability
-- Midland plays a critical role in the Odessa metro broadband landscape
+## 🛠️ Tools & Technologies
 
-
-##  Tools & Technologies
-
-- Python
+- Python (Google Colab)
   - Pandas
   - GeoPandas
   - Folium
   - H3
-- Google Colab
-- FiberLocator API
+  - Requests
+  - Shapely
+  - NumPy
+  - Matplotlib
 
-## Repository Structure
+---
 
-- `BDC_TEXAS_2026.ipynb` → Main analysis notebook
-- `README.md` → Project documentation
+## 📁 Repository Contents
 
+- `BDC_TEXAS_2026.ipynb` → Main analysis notebook  
+- `README.md` → Project documentation  
 
-## Notes
+---
 
-- FCC data does not include city-level identifiers, requiring geographic filtering via FIPS codes
-- H3 indexing was used to standardize spatial aggregation
-- FiberLocator data requires authentication via API
+## ⚠️ Limitations
 
+- County-level filtering may include areas outside exact city boundaries  
+- FCC and FiberLocator datasets may not fully align  
+- Dataset size impacts processing performance  
+- FiberLocator data depends on API availability  
 
-## Future Improvements
+---
 
-- Add statistical comparison between regions
-- Incorporate speed tiers (if available)
-- Improve visualization styling and interactivity (maps)
-- Expand analysis to additional Texas markets
+## 🚀 Future Work
+
+- Extend analysis to Kingston, New York  
+- Incorporate speed tiers and performance metrics  
+- Improve map styling and interactivity  
+- Perform deeper statistical comparisons across regions  
+
+---
 
