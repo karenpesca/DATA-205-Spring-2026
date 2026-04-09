@@ -7,7 +7,7 @@ This project analyzes broadband provider coverage using FCC Broadband Data Colle
 
 The goal is to identify differences, overlaps, and gaps between FCC-reported broadband availability and network infrastructure data provided by FiberLocator in selected Texas cities.
 
-## Research Goal
+### Research Goal
 
 The primary objective is to compare broadband provider coverage across datasets to understand:
 
@@ -15,7 +15,7 @@ The primary objective is to compare broadband provider coverage across datasets 
 - Differences between reported service and physical infrastructure
 - Geographic patterns of broadband availability
 
-## Research Questions
+### Research Questions
 
 1. Which broadband carriers are available in each city based on FCC data?
 Method: Extract brand_name, group by H3 hexagon, and identify unique providers.
@@ -44,7 +44,7 @@ Since the FCC dataset does not include city names, counties were used as geograp
 
 Filtered data using the first five digits of the "block_geoid" variable.
 
-## Tools & Technologies
+### Tools & Technologies
 
 - Python (Google Colab)
   - Pandas
@@ -56,7 +56,7 @@ Filtered data using the first five digits of the "block_geoid" variable.
   - NumPy
   - Matplotlib
 
-### Data Ingestion
+## Data Ingestion
 
 This project uses both **static data** and **live data**:
 
@@ -86,7 +86,7 @@ Accessed via API and/or GeoJSON:
 FCC fiber and cable datasets were loaded from Google Drive and combined using concatenation for a unified analysis. The FiberLocator API was accessed using username and password credentials provided by FiberLocator.
 
 
-### 3. Data Cleaning & Preparation
+## 3. Data Cleaning & Preparation
 -  Used string conversion on "block_geoid" during filtering to extract the first five digits (county FIPS codes)
 - Extracted county FIPS from "block_geoid"
 - Filtered dataset to selected counties
@@ -96,14 +96,14 @@ FCC fiber and cable datasets were loaded from Google Drive and combined using co
   - Business/Residential ("X")
 
 
-### 4. Exploratory Data Analysis (EDA)
+## 4. Exploratory Data Analysis (EDA)
 - Counted providers using "brand_name"
 - Analyzed distribution of technologies
 - Evaluated business vs residential composition
 - Generated summary tables and visualizations (Bar chart and maps)
 
 
-### 5. Spatial Aggregation (H3)
+### Spatial Aggregation (H3)
 
 Data was grouped by "h3_res8_id" to create spatial summaries:
 
@@ -112,12 +112,12 @@ Data was grouped by "h3_res8_id" to create spatial summaries:
 - Provider count ("unique_brands_count")
 - Technologies present
 
-### 6. Geometry Creation
+### Geometry Creation
 - Converted H3 indices into polygon geometries
 - Built GeoDataFrames using GeoPandas and Shapely
 - Exported GeoJSON for mapping
 
-### 7. Visualization
+### 5. Visualization
 
 Visualizations were created using Folium and Matplotlib to support the analysis.
 
@@ -127,7 +127,6 @@ Visualizations were created using Folium and Matplotlib to support the analysis.
 - Used as an initial step to understand provider distribution before spatial analysis
 
   
-
 #### FCC Maps
 - Show provider density and availability using H3 hexagons
 
@@ -138,7 +137,7 @@ Visualizations were created using Folium and Matplotlib to support the analysis.
   - Connected buildings
 
 
-### 7. Comparison Analysis
+## 6. Comparison Analysis
 
 FCC and FiberLocator data were compared to identify:
 
@@ -147,7 +146,7 @@ FCC and FiberLocator data were compared to identify:
 - Spatial mismatches between availability and infrastructure
 
 
-## Key Observations
+### Key Observations
 
 - Broadband availability varies significantly across hexagons
 - Provider presence is concentrated in specific geographic clusters
@@ -168,7 +167,7 @@ FCC and FiberLocator data were compared to identify:
 - Dataset size impacts processing performance  
 - FiberLocator data depends on API availability  
 
-## Exploratory Data Analysis (EDA) Findings  
+## 7.  Exploratory Data Analysis (EDA) Findings  
 
 Initial exploratory analysis identified differences between FCC data and FiberLocator data across the selected regions. Based on the first visualization (bar chart) discussed during the meeting with FiberLocator, it was observed that in some areas the FCC dataset reported a higher number of providers, while in others FiberLocator showed more detailed network infrastructure coverage.
 
