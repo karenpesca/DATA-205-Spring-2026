@@ -1,5 +1,5 @@
 # Broadband Provider Coverage Comparison  
-## FCC vs FiberLocator Data – Texas Case Study (Odessa & Wichita Falls)
+## FCC vs FiberLocator Data – Texas Case Study (Odessa-Midland area)
 
 ## 1. Project Overview
 
