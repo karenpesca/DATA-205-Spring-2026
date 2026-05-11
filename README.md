@@ -40,7 +40,6 @@ Since the FCC dataset does not include city names, counties were used as geograp
 
 - **Ector County (48135)** → Odessa  
 - **Midland County (48329)** → Odessa metro area  
-- **Wichita County (48485)** → Wichita Falls  
 
 Filtered data using the first five digits of the "block_geoid" variable.
 
